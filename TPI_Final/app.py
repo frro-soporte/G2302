@@ -14,6 +14,8 @@ from routes.kayaktype import kayaktypes
 from routes.contacts import contacts
 from routes.hanger import hangers
 from routes.calendarYear import calendarYears
+from routes.quota import quotas
+from routes.paymentType import paymenttype
 
 
 app = Flask(__name__)
@@ -40,4 +42,7 @@ app.register_blueprint(kayaktypes)
 app.register_blueprint(contacts)
 app.register_blueprint(hangers)
 app.register_blueprint(calendarYears)
+app.register_blueprint(quotas)
+app.register_blueprint(paymenttype)
+
 

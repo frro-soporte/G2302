@@ -1,0 +1,43 @@
+{% extends 'layout.html' %}   
+{% block body %}
+    <div>
+        <table class="table col-xl-6 col-lg-6 col-md-6 col-sm-6 mx-auto mt-3 ">
+            {% include 'partial/_message.html'%}
+            <a href="{{ url_for('quotas.create') }}"  style="float: right;margin-bottom: 1%;">
+                <button class="btn btn-primary float-right"  >Crear</button>
+            </a>
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Cuota</th>
+                    <th scope="col">Calendario</th>
+                    <th scope="col">Fecha de creación</th>
+                    <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for q in quotas%}
+                {% if q.state == 1 %}
+                    <tr>
+                        <td>{{q.id}}</td>
+                        <td>{{q.quota}}</td>
+                        <td>{%for c in calendarios%}
+                            {%if c.id == q.calendarId %}
+                            {{c.yearCalendar}}
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{q.createDate}}</td>
+                        
+                        <td>
+                            <a href="{{ url_for('quotas.update', id=q.id) }}"><i class="fa-solid fa-pencil"></i></a>
+                            
+                            <a href="{{ url_for('quotas.delete', id=q.id) }}"><i class="fa-solid fa-trash-can"></i></a> 
+                        </td>
+                    </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>       
+    </div>
+{% endblock %}

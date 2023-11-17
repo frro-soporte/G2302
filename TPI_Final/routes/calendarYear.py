@@ -35,7 +35,7 @@ def create():
         db.session.add(add)
         db.session.commit()
 
-        flash("El calendario se guardo correctamente", "alert alert-success")
+        flash("El calendario se guardó correctamente", "alert alert-success")
 
         return redirect(url_for('calendarYears.getAll'))
     
@@ -52,7 +52,7 @@ def update(id):
         
         db.session.commit()
 
-        flash("El calendario se actualizo correctamente", "alert alert-success")
+        flash("El calendario se actualizó correctamente", "alert alert-success")
 
         return redirect(url_for('calendarYears.getAll'))
     else:    
@@ -61,13 +61,14 @@ def update(id):
     
 
 @calendarYears.route("/calendarYear/delete/<id>")
+@login_required
 def delete(id):
    try:
         dele = calendarYear.query.get(id)
         db.session.delete(dele)
         db.session.commit()
         
-        flash("El calendario se elimino correctamente", "alert alert-success")
+        flash("El calendario se eliminó correctamente", "alert alert-success")
 
         return redirect(url_for('calendarYears.getAll'))
    except Exception as ex:
