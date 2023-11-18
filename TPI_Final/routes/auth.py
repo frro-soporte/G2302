@@ -53,7 +53,7 @@ def auth():
 @login_required
 def home():
     datos_diccionario = json.loads(datos_JSON)
-    print("datos_diccionario ",datos_diccionario);
+    print("datos_diccionario ",datos_diccionario)
     return render_template('layout.html',products = datos_diccionario)
 
 @auths.route("/logout", methods=["GET"])   
