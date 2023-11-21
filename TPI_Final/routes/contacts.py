@@ -41,7 +41,7 @@ def create():
     db.session.add(add)
     db.session.commit()
 
-    flash("El contacto se guardo correctamente", "alert alert-success")
+    flash("El contacto se guardó correctamente", "alert alert-success")
 
     return redirect(url_for('contacts.getAll'))
 
@@ -57,7 +57,7 @@ def update(id):
         
         db.session.commit()
 
-        flash("El contacto se actualizo correctamente", "alert alert-success")
+        flash("El contacto se actualizó correctamente", "alert alert-success")
 
         return redirect(url_for('contacts.getAll'))
     else:    

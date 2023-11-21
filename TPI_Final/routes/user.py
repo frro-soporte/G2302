@@ -3,6 +3,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.user import user
 from models.role import role
 from data.db import db
+from werkzeug.security import generate_password_hash
+
 
 users = Blueprint('users', __name__)
 
@@ -130,3 +132,34 @@ def delete(id):
     flash("El permiso se elimino correctamente", "alert alert-success")
 
     return redirect(url_for('users.getAll'))
+
+
+@users.route("/user/reset_pass", methods=["POST", "GET"])
+def reset_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        username = request.form['username']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        user_instance = user.query.filter_by(mail=email, userName=username).first()
+
+        if user_instance is None:
+            flash("Usuario no encontrado. Verifica tu correo electrónico y nombre de usuario.", "alert alert-danger")
+            return render_template('user/reset_pass.html')
+
+        if new_password != confirm_password:
+            flash("Las contraseñas no coinciden. Inténtalo de nuevo.", "alert alert-danger")
+            return render_template('user/reset_pass.html')
+
+        print(f"Email: {email}, Username: {username}, New Password: {new_password}, Confirm Password: {confirm_password}")
+        print(f"User instance: {user_instance}")
+
+
+        user_instance.userPass = generate_password_hash(new_password)
+        db.session.commit()
+
+        flash("Contraseña actualizada correctamente.", "alert alert-success")
+
+        return redirect(url_for('auth.login'))
+
+    return render_template('user/reset_pass.html')
