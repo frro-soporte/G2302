@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+    <div class="container mt-3">
+        <h2 class="mb-3">Usuarios</h2>
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in datos_JSON %}
+                <tr>
+                    <td>{{ user.name }}</td>
+                    <td><img src="{{ url_for('static', filename='img/' + user.url) }}" alt="{{ user.name }}" class="img-thumbnail"></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
