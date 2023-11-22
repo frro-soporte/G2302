@@ -5,6 +5,8 @@ from models.role import role
 from data.db import db
 from werkzeug.security import generate_password_hash
 
+from werkzeug.security import generate_password_hash
+
 
 users = Blueprint('users', __name__)
 
