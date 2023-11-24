@@ -3,6 +3,7 @@
     <div class="abs-center">
       <form id="formulario" action="/auth" method="post" class="form border p-3 form">
         {% include 'partial/_message.html'%}
+        <img class="card-img-top imglog" src="{{ url_for('static', filename='img/kayak4.jpg') }}" alt="Card image cap">
         <h2 class="text-center">Cuenta</h2>
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="form-group">

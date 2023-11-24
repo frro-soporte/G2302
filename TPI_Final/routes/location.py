@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.location import location
 from data.db import db
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required,current_user
+from menu.menu import Menu
 
 locations = Blueprint('locations', __name__)
 
@@ -9,7 +10,7 @@ locations = Blueprint('locations', __name__)
 @login_required
 def getAll():
     loc = location.query.all()
-    return render_template('location/list.html',locs=loc)
+    return render_template('location/list.html',locs=loc,menues = Menu.MenuesStatic(current_user.roleId))
 
 @locations.route("/locations/<id>", methods=["GET"])
 def getbyid(id):
@@ -18,7 +19,7 @@ def getbyid(id):
 @locations.route("/location/create", methods=["POST", "GET"])
 def create():
     if request.method == 'GET':
-        return render_template('location/create.html')
+        return render_template('location/create.html',menues = Menu.MenuesStatic(current_user.roleId))
     
     name = request.form['name']
     userId = current_user.id
@@ -58,7 +59,7 @@ def update(id):
         return redirect(url_for('locations.getAll'))
     else:    
         updateid = location.query.get(id)
-        return render_template('location/update.html', updates=updateid)
+        return render_template('location/update.html', updates=updateid,menues = Menu.MenuesStatic(current_user.roleId))
 
 @locations.route("/location/delete/<id>")
 def delete(id):

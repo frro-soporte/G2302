@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from routes.kayak import kayaks
 from flask_wtf.csrf import CSRFProtect #Para proteger el login mediante un token
 
 from config import DATABASE_CONNECTION_URI
@@ -39,6 +40,7 @@ app.register_blueprint(roles)
 app.register_blueprint(users)
 app.register_blueprint(locations)
 app.register_blueprint(kayaktypes)
+app.register_blueprint(kayaks)
 app.register_blueprint(contacts)
 app.register_blueprint(hangers)
 app.register_blueprint(calendarYears)

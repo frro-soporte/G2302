@@ -1,10 +1,11 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+from menu.menu import Menu
 from models.user import user
 from models.role import role
 from data.db import db
 from werkzeug.security import generate_password_hash
-
+from flask_login import current_user
 from werkzeug.security import generate_password_hash
 
 
@@ -14,7 +15,7 @@ users = Blueprint('users', __name__)
 def getAll():
     # usr = user.query.all()
     userfilter = user.query.all()
-    return render_template('user/list.html',userfilter = userfilter)
+    return render_template('user/list.html',userfilter = userfilter,menues = Menu.MenuesStatic(current_user.roleId))
 
     # return render_template('role/list.html',roles=roles)
 
@@ -26,7 +27,7 @@ def getbyid(id):
 def create():
     roles = role.query.all()
     if request.method == 'GET':
-        return render_template('user/create.html',roles=roles)
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     
     roleId = request.form['roleId']
     firstName = request.form['firstName']
@@ -38,33 +39,37 @@ def create():
     userName = request.form['userName']
     userPass = request.form['userPass']
 
+    isExistUser = user.query.filter_by(userName=userName).first()
+    if  isExistUser:
+        flash("Existe un usuario con ese nombre","alert alert-danger")
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     if roleId == '':
         flash("Debe seleccionar el permiso","alert alert-danger")
-        return render_template('user/create.html',roles=roles)
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     if firstName == '':
         flash("Debe ingresar el nombre","alert alert-danger")
-        return render_template('user/create.html',roles=roles)
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     if lastName == '':
         flash("Debe ingresar el apellido","alert alert-danger")
-        return render_template('user/create.html',roles=roles)
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     if address == '':
         flash("Debe ingresar la direccion","alert alert-danger")
-        return render_template('user/create.html',roles=roles)
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     if phone == '':
         flash("Debe ingresar el telefono","alert alert-danger")
-        return render_template('user/create.html',roles=roles)
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     if docNumber == '':
         flash("Debe ingresar el numero de documento","alert alert-danger")
-        return render_template('user/create.html',roles=roles)
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     if mail == '':
         flash("Debe ingresar el correo electronico","alert alert-danger")
-        return render_template('user/create.html',roles=roles)
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
     if userName == '':
         flash("Debe ingresar el nombre de usuario","alert alert-danger")
-        return render_template('user/create.html',roles=roles) 
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId)) 
     if userPass == '':
         flash("Debe ingresar la contraseña del usuario","alert alert-danger")
-        return render_template('user/create.html',roles=roles)      
+        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))      
 
     new_user = user(roleId,firstName,lastName,address,phone,docNumber,mail,userName,userPass,1)
 
@@ -120,7 +125,7 @@ def update(id):
         return redirect(url_for('users.getAll'))
     else:    
         updaterol = user.query.get(id)
-        return render_template('update.html', updates=updaterol)
+        return render_template('user/update.html', updates=updaterol,menues = Menu.MenuesStatic(current_user.roleId))
 
 @users.route("/user/delete/<id>")
 def delete(id):

@@ -1,17 +1,24 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
-from flask_login import login_user, logout_user, login_required, current_user
-from flask_principal import identity_changed, Identity, RoleNeed, Permission
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask_login import login_user, logout_user,login_required,current_user
+
+from models.role import role
+
 from models.user import user
 from models.auth import Auth
+from menu.menu import Menu;
 from data.db import db
 import data
 import json
 
+import data
+import json
+
+
 auths = Blueprint('auth', __name__)
 
 # Definir permisos
-admin_permission = Permission(RoleNeed('Admin'))
-user_permission = Permission(RoleNeed('User'))
+# admin_permission = Permission(RoleNeed('Admin'))
+# user_permission = Permission(RoleNeed('User'))
 
 @auths.route("/", methods=["GET"])
 def login():
@@ -37,19 +44,8 @@ def auth():
         
             if authentication.userPass:
                 login_user(authentication)
-                identity_changed.send(current_app._get_current_object(), identity=Identity(authentication.id))
-                
-                flash("Inicio de sesión exitoso", "alert alert-success")
-
-                # Redirigir según el rol del usuario
-                
-                if admin_permission.can():
-                    print("chau!!")
-                    return render_template('auth/dashboard_admin.html')
-                elif user_permission.can():
-                    print("hola")
-                    return render_template('auth/dashboard_user.html')  # Ver si redirigir a otra  pagina
-
+                prod = json.loads(datos_JSON);  
+                return render_template('layout.html',products = prod,menues = Menu.MenuesStatic(current_user.roleId)) 
             else:
                 flash("Usuario y/o contraseña incorrectos", "alert alert-danger")
 
@@ -62,13 +58,14 @@ def auth():
         flash("Error en el inicio de sesión", "alert alert-danger")
         return redirect(url_for('auth.login'))
 
-#@auths.route("/home", methods=["GET"])
-#@login_required
+@auths.route("/home", methods=["GET"])
+@login_required
 def home():
-    if admin_permission.can():
-        return redirect(url_for('auth.login')) 
-    elif user_permission.can():
-        return redirect(url_for('auth.login'))
+    return render_template('layout.html',products =json.loads(datos_JSON),menues = Menu.MenuesStatic(current_user.roleId))
+    # if admin_permission.can():
+    #     return redirect(url_for('auth.login')) 
+    # elif user_permission.can():
+    #     return redirect(url_for('auth.login'))
 # datos_diccionario = json.loads(datos_JSON)
 #    print("datos_diccionario ",datos_diccionario)
 #    return render_template('layout.html',products = datos_diccionario)  # Página para usuarios regulares
@@ -84,7 +81,6 @@ def status_401(error):
 
 def status_404(error):
     return "<h1>Página no encontrada</h1>", 404
-
 
 datos_JSON =  """
 [ {

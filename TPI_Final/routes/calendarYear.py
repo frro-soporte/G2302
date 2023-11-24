@@ -3,6 +3,7 @@ from models.calendarYear import calendarYear
 from data.db import db
 from flask_login import current_user, login_required
 from datetime import datetime
+from menu.menu import Menu
 
 calendarYears = Blueprint('calendarYears', __name__)
 
@@ -10,13 +11,13 @@ calendarYears = Blueprint('calendarYears', __name__)
 @login_required
 def getAll():
     cal = calendarYear.query.all()
-    return render_template('calendarYear/list.html',cal = cal)
+    return render_template('calendarYear/list.html',cal = cal,menues = Menu.MenuesStatic(current_user.roleId))
 
 @calendarYears.route('/calendarYear/create', methods=['GET', 'POST'])
 @login_required
 def create():
     if request.method == 'GET':
-        return render_template('calendarYear/create.html')
+        return render_template('calendarYear/create.html',menues = Menu.MenuesStatic(current_user.roleId))
     
     if request.method == 'POST':
         yearCalendar = request.form['yearCalendar']
@@ -57,7 +58,7 @@ def update(id):
         return redirect(url_for('calendarYears.getAll'))
     else:    
         updateid = calendarYear.query.get(id)
-        return render_template('calendarYear/update.html', c=updateid)
+        return render_template('calendarYear/update.html', c=updateid,menues = Menu.MenuesStatic(current_user.roleId))
     
 
 @calendarYears.route("/calendarYear/delete/<id>")

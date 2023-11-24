@@ -20,3 +20,11 @@ form:before {
     justify-content: center;
     min-height: 100vh;
   }
+
+  .imglog{
+    width: 35%;
+    border-radius: 50%;
+    height: 20vh;
+    position: relative;
+    left: 32%;
+  }

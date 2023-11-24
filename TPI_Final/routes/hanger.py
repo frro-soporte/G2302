@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.hanger import hanger
 from models.location import location
 from data.db import db
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required,current_user
+from menu.menu import Menu;
 from datetime import datetime
 
 
@@ -13,14 +14,14 @@ hangers = Blueprint('hangers', __name__)
 def getAll():
     hangs = hanger.query.all()
     loc = location.query.all()
-    return render_template('hanger/list.html', hang = hangs, loc = loc)
+    return render_template('hanger/list.html', hang = hangs, loc = loc,menues = Menu.MenuesStatic(current_user.roleId))
 
 @hangers.route("/hanger/create", methods=["POST", "GET"])
 @login_required
 def create():
     if request.method == 'GET':
         loc = location.query.all()
-        return render_template('hanger/create.html', loc = loc)
+        return render_template('hanger/create.html', loc = loc,menues = Menu.MenuesStatic(current_user.roleId))
     
     nroHanger = request.form['nroHanger']
     description = request.form['description']
@@ -58,7 +59,7 @@ def update(id):
     else:    
         updateid = hanger.query.get(id)
         loc = location.query.all()
-        return render_template('hanger/update.html', hanger=updateid, loc = loc)
+        return render_template('hanger/update.html', hanger=updateid, loc = loc,menues = Menu.MenuesStatic(current_user.roleId))
 
 
 @hangers.route("/hanger/delete/<id>")

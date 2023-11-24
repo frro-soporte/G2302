@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from models.kayaktype import kayaktype
 from flask.views import MethodView
 from data.db import db
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required,current_user
+from menu.menu import Menu
 
 import uuid
 import os
@@ -18,7 +19,7 @@ kayaktypes = Blueprint('kayaktypes', __name__)
 @login_required
 def getAll():
     loc = kayaktype.query.all()
-    return render_template('kayaks/kayaktype/list.html',locs=loc)
+    return render_template('kayak/kayaktype/list.html',locs=loc,menues = Menu.MenuesStatic(current_user.roleId))
 
 @kayaktypes.route("/kayaktypes/<id>", methods=["GET"])
 def getbyid(id):
@@ -51,7 +52,7 @@ def Upload():
 @kayaktypes.route("/kayaktypes/create", methods=["POST", "GET"])
 def create():
     if request.method == 'GET':
-        return render_template('kayaks/kayaktype/create.html')
+        return render_template('kayak/kayaktype/create.html',menues = Menu.MenuesStatic(current_user.roleId))
     
     name = request.form['name']
     userId = current_user.id
@@ -95,7 +96,7 @@ def update(id):
         return redirect(url_for('kayaktypes.getAll'))
     else:    
         updateid = kayaktype.query.get(id)
-        return render_template('kayaks/kayaktype/update.html', updates=updateid)
+        return render_template('kayak/kayaktype/update.html', updates=updateid,menues = Menu.MenuesStatic(current_user.roleId))
 
 @kayaktypes.route("/kayaktypes/delete/<id>")
 def delete(id):
