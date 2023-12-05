@@ -1,5 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash,jsonify, abort
+import json
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash,jsonify, abort
+from models.kayak import kayak
 from models.kayaktype import kayaktype
+from models.user import user
+from models.hanger import hanger
+from models.location import location
 from data.db import db
 from flask_login import current_user, login_required
 from menu.menu import Menu
@@ -17,48 +22,75 @@ kayaks = Blueprint('kayaks', __name__)
 @kayaks.route("/kayak", methods=["GET"])
 @login_required
 def getAll():
-    loc = kayaktype.query.all()
-    return render_template('kayak/list.html',menues = Menu.MenuesStatic(current_user.roleId))
+    val = kayak.query.all()
+    return render_template('kayak/list.html', datas = val,menues = Menu.MenuesStatic(current_user.roleId))
 
 @kayaks.route("/kayaks/<id>", methods=["GET"])
 def getbyid(id):
-    return kayaktype.query.get(id)
+    return kayak.query.get(id)
+
+# @kayaks.route("/kayaks/<id>", methods=["GET"])
+@kayaks.route('/selectHangers/<id>', methods=['GET'])
+def selectHangers(id):
+    print("locationId", id)
+    hangerlist = hanger.query.filter_by(locationId=id).all()
+    data = {}
+    data['hangers'] = []
+
+    for item in hangerlist:
+        data['hangers'].append({
+        'id': item.id,
+        'nroHanger': item.nroHanger
+        })
+    with open('data.json', 'w') as file:
+        json.dump(data, file, indent=4)
+    return data
 
 @kayaks.route("/kayaks/Upload", methods=["GET"])
 def Upload():
-            image_data = request.json['data']
-            extension = request.json['extension']
+    image_data = request.json['data']
+    extension = request.json['extension']
 
-            image_data = bytes(image_data, encoding="ascii")
+    image_data = bytes(image_data, encoding="ascii")
 
-            image_name = str(uuid.uuid4()) + extension
+    image_name = str(uuid.uuid4()) + extension
 
-            image = Image.open(BytesIO(base64.b64decode(image_data)))
-            image_directory = os.path.join(os.getcwd(), 'static', 'upload', 'image','')
+    image = Image.open(BytesIO(base64.b64decode(image_data)))
+    image_directory = os.path.join(os.getcwd(), 'static', 'upload', 'image','')
 
-            file_path = image_directory + image_name
-            
-            # save image to file system
-            image.save(file_path)
+    file_path = image_directory + image_name
+    
+    # save image to file system
+    image.save(file_path)
 
-            response = {
-                "message": "Image Uploaded",
-                "body": {
-                    "image_id": image_name,
-                }
-            }
-            return jsonify(response)
+    response = {
+        "message": "Image Uploaded",
+        "body": {
+            "image_id": image_name,
+        }
+    }
+    return jsonify(response)
 
 @kayaks.route("/kayaks/create", methods=["POST", "GET"])
 def create():
     if request.method == 'GET':
-        return render_template('kayak/create.html',menues = Menu.MenuesStatic(current_user.roleId))
+        typekayak = kayaktype.query.filter_by(state=1)
+        partnerslist = user.query.filter_by(roleId=3)
+        menulist = Menu.MenuesStatic(current_user.roleId)
+        locationlist = location.query.filter_by(state=1)
+        return render_template('kayak/create.html',ktype = typekayak,menues = menulist, partners=partnerslist,locations = locationlist)
     
-    name = request.form['name']
+    kayaktypeid = request.form['kayaktypeid']
+    partnerid = request.form['partner']
+    hangerid = request.form['hangerid']
+    nroKayak = request.form['nroKayak']
+    shovelQuantity = request.form['shovelQuantity']
+    crewmember = request.form['crewmember']
+
     userId = current_user.id
     description = request.form['description']
     
-    isexist = kayaktype.query.filter_by(name=name).first()
+    isexist = kayak.query.filter_by(name=name).first()
     if isexist :
         flash("Ya existe un tipo de kayak con ese nombre","alert alert-danger")
         return redirect(url_for('kayaktypes.create'))
@@ -72,7 +104,7 @@ def create():
         flash("La cantidad de caracteres en la descripcion no puede ser mayor que 250.","alert alert-danger")
         return redirect(url_for('kayaktypes.create'))
 
-    add = kayaktype(userId,name,description,1)
+    add = kayak(userId,name,description,1)
 
     db.session.add(add)
     db.session.commit()
@@ -84,7 +116,7 @@ def create():
 @kayaks.route("/kayaks/update/<id>", methods=["POST", "GET"])
 def update(id):
     if request.method == 'POST':
-        update = kayaktype.query.get(id)
+        update = kayak.query.get(id)
         
         update.name = request.form['name']
         update.description = request.form['description']
@@ -95,13 +127,13 @@ def update(id):
 
         return redirect(url_for('kayaktypes.getAll'))
     else:    
-        updateid = kayaktype.query.get(id)
+        updateid = kayak.query.get(id)
         return render_template('kayaks/kayaktype/update.html', updates=updateid,menues = Menu.MenuesStatic(current_user.roleId))
 
 @kayaks.route("/kayaks/delete/<id>")
 def delete(id):
    try:
-        dele = kayaktype.query.get(id)
+        dele = kayak.query.get(id)
         db.session.delete(dele)
         db.session.commit()
         

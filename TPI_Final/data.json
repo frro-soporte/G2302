@@ -1,0 +1,12 @@
+{
+    "hangers": [
+        {
+            "id": 1,
+            "nroHanger": 1
+        },
+        {
+            "id": 2,
+            "nroHanger": 2
+        }
+    ]
+}

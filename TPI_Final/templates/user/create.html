@@ -7,18 +7,13 @@
                         <form action="/user/create" method="post"> 
                           <input type="hidden" name="csrf_token" value = "{{ csrf_token() }}" /> 
                           {% include 'partial/_message.html'%}
-                          <div class="form-group col-md-12 mb-3" *ngIf="!OptionBtn">
-                            <select  name="roleId"  [class]="isValidField('roleId')" class="form-control" id="inputRole">
+                          <div class="form-group col-md-12 mb-3" >
+                            <select  name="roleId"  class="form-control" id="inputRole">
                               <option value="">Seleccionar un permiso</option>
                               {%  for role in roles %}
                                 <option value="{{ role.id}}"   name="roleId">{{role.name}}</option>
                               {% endfor %}
                             </select>
-                            <div class="invalid-feedback">
-                              <span *ngIf="browserForm.get('roleId').errors?.required">
-                                  Debe seleccionar un permiso
-                              </span>
-                            </div>
                           </div>
 
                             <div class="row mb-2">

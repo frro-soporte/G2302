@@ -26,8 +26,9 @@ def getbyid(id):
 @users.route("/user/create", methods=["POST", "GET"])
 def create():
     roles = role.query.all()
+    menulist =Menu.MenuesStatic(current_user.roleId)
     if request.method == 'GET':
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     
     roleId = request.form['roleId']
     firstName = request.form['firstName']
@@ -42,34 +43,34 @@ def create():
     isExistUser = user.query.filter_by(userName=userName).first()
     if  isExistUser:
         flash("Existe un usuario con ese nombre","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     if roleId == '':
         flash("Debe seleccionar el permiso","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     if firstName == '':
         flash("Debe ingresar el nombre","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     if lastName == '':
         flash("Debe ingresar el apellido","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     if address == '':
         flash("Debe ingresar la direccion","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     if phone == '':
         flash("Debe ingresar el telefono","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     if docNumber == '':
         flash("Debe ingresar el numero de documento","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     if mail == '':
         flash("Debe ingresar el correo electronico","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))
+        return render_template('user/create.html',roles=roles,menues = menulist)
     if userName == '':
         flash("Debe ingresar el nombre de usuario","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId)) 
+        return render_template('user/create.html',roles=roles,menues = menulist) 
     if userPass == '':
         flash("Debe ingresar la contraseña del usuario","alert alert-danger")
-        return render_template('user/create.html',roles=roles,menues = Menu.MenuesStatic(current_user.roleId))      
+        return render_template('user/create.html',roles=roles,menues = menulist)      
 
     new_user = user(roleId,firstName,lastName,address,phone,docNumber,mail,userName,userPass,1)
 
@@ -91,6 +92,7 @@ def update(id):
         phone = request.form['phone']
         docNumber = request.form['docNumber']
         mail = request.form['mail']
+        
 
         if firstName == '':
             flash("Debe ingresar el nombre","alert alert-danger")

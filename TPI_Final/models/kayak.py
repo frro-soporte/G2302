@@ -21,6 +21,5 @@ class kayak(db.Model):
         self.nroKayak = nroKayak
         self.shovelQuantity = shovelQuantity
         self.crewmember = crewmember
-        self.userId = userId
         self.createDate = datetime.now()
         self.state = state

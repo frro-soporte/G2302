@@ -12,8 +12,8 @@ hangers = Blueprint('hangers', __name__)
 @hangers.route("/hangers", methods=["GET"])
 @login_required
 def getAll():
-    hangs = hanger.query.all()
-    loc = location.query.all()
+    hangs = hanger.query.filter_by(state=1)
+    loc = location.query.filter_by(state=1)
     return render_template('hanger/list.html', hang = hangs, loc = loc,menues = Menu.MenuesStatic(current_user.roleId))
 
 @hangers.route("/hanger/create", methods=["POST", "GET"])
@@ -30,7 +30,10 @@ def create():
     userId = current_user.id
     finalDate = None
     state = 1
-
+    isexist = hanger.query.filter_by(nroHanger=nroHanger,locationId=idLocation,state=1).first()
+    if isexist :
+        flash("Ya existe un perchas con ese numero para esa zona","alert alert-danger")
+        return redirect(url_for('hangers.create'))
     if nroHanger == '':
         flash("Debe ingresar el número de hanger","alert alert-danger")
         return redirect(url_for('hangers.create'))
@@ -49,7 +52,7 @@ def update(id):
     if request.method == 'POST':
         h = hanger.query.get(id)
         h.nroHanger = request.form['nroHanger']
-        h.location = request.form['location']
+        h.locationId = request.form['location']
         h.description = request.form['description']
         db.session.commit()
 

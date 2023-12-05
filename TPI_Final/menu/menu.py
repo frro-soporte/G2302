@@ -6,19 +6,18 @@ class Menu():
     @classmethod
     def MenuesStatic(self, idrole):
         rol = role.query.get(idrole)
-        if "Admin"== rol.name:       
+        if ("Admin").lower()== rol.name.lower():       
             return  OptionMenu.GetAdmin()
-        # elif "User"== rol.name:
-        else:
+        elif ("User").lower()== rol.name.lower():
             return OptionMenu.GetEmployees()  # Ver si redirigir a otra  pagina
-        # else:
-        #     return OptionMenu.GetPartners() 
+        else:
+            return OptionMenu.GetPartners() 
     
 class OptionMenu():
     def GetAdmin():
         menunav=[
         {
-            "url":"/Kayak",
+            "url":"/kayak",
             "displayName":"Kayak",
             "active":"active kayak",
             "isSubMenu": "false"
@@ -56,13 +55,38 @@ class OptionMenu():
         {
             "url":"/payment",
             "displayName":" Cobranza",
-            "active":"hanger"
+            "active":"hanger",
+            "isSubMenu": "false"
+        },
+        {
+            "displayName":"Informes",
+            "isSubMenu": "true",
+            "Submenu":[
+                 {
+                    "url":"/paymenteMonth",
+                    "displayName":"Informa mess",
+                    "active":"partner",
+                    "isSubMenu": "false"
+                },
+                {
+                    "url":"/ritired",
+                    "displayName":"Kayak",
+                    "active":"partner",
+                    "isSubMenu": "false"
+                },
+                {
+                    "url":"/ejemplo",
+                    "displayName":"ejemplo",
+                    "active":"partner",
+                    "isSubMenu": "false"
+                }
+            ]
         },
         {
             "url":"",
             "displayName":"",
             "active":"",
-            "isSubMenu": "true"
+            "isSubMenu": "false"
         }
         ]
         return menunav

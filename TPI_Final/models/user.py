@@ -12,6 +12,7 @@ class user(db.Model, UserMixin):
     phone = db.Column(db.String(250), nullable=False)
     docNumber = db.Column(db.String(250), nullable=False)
     mail = db.Column(db.String(250), nullable=False)
+    userType = db.Column(db.Integer)
     userName = db.Column(db.String(100), nullable=False)
     userPass = db.Column(db.String(250), nullable=False)
     state = db.Column(db.Integer)
