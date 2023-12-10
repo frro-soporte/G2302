@@ -5,7 +5,7 @@ from models.user import user
 from models.role import role
 from data.db import db
 from werkzeug.security import generate_password_hash
-from flask_login import current_user
+from flask_login import current_user, login_required
 from werkzeug.security import generate_password_hash
 
 
@@ -24,9 +24,17 @@ def getbyid(id):
     return "Role by id"
 
 @users.route("/user/create", methods=["POST", "GET"])
+@login_required
 def create():
     roles = role.query.all()
-    menulist =Menu.MenuesStatic(current_user.roleId)
+
+
+    if current_user.is_authenticated:
+        menulist = Menu.MenuesStatic(current_user.roleId)
+    else:
+        menulist = []
+
+    #menulist = Menu.MenuesStatic(current_user.roleId)
     if request.method == 'GET':
         return render_template('user/create.html',roles=roles,menues = menulist)
     
