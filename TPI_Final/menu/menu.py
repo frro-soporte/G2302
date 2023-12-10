@@ -53,7 +53,7 @@ class OptionMenu():
             "isSubMenu": "false"
         },
         {
-            "url":"/payment",
+            "url":"/paymenttype",
             "displayName":" Cobranza",
             "active":"hanger",
             "isSubMenu": "false"
