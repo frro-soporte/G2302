@@ -19,3 +19,4 @@ def __init__(self, userId, locationId, nroHanger ,description,createDate, finalD
     self.createDate = createDate
     self.finalDate = finalDate
     self.state = state
+
