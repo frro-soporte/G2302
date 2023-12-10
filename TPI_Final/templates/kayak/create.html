@@ -44,11 +44,11 @@
                             
                             <div class="row mb-2">
                               <div class="form-group col">
-                                <select  name="hangerid"  class="form-control" id="inputRole">
-                                    <option value="">Seleccionar el percha</option>
-                                    {%  for tpk in ktype %}
-                                      <option value="{{ tpk.id}}"   name="hangerid">{{tpk.name}}</option>
-                                    {% endfor %}
+                                  <select name="hangerid" class="form-control" id="hangerid">
+                                      <option value="" selected disabled>Seleccionar la percha</option>
+                                      {% for h in hang %}
+                                          <option value="{{ h.id }}">{{ h.nroHanger }} - Ubicación: {{ h.location.name }}</option>
+                                      {% endfor %}
                                   </select>
                               </div>
                               <div class="form-group col">
