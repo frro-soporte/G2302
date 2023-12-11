@@ -24,7 +24,7 @@ def getbyid(id):
     return "Role by id"
 
 @users.route("/user/create", methods=["POST", "GET"])
-#@login_required
+@login_required
 def create():
     roles = role.query.all()
 
