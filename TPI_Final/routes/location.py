@@ -3,6 +3,7 @@ from models.location import location
 from data.db import db
 from flask_login import current_user, login_required,current_user
 from menu.menu import Menu
+from datetime import datetime
 
 locations = Blueprint('locations', __name__)
 
@@ -65,10 +66,11 @@ def update(id):
 def delete(id):
    try:
         dele = location.query.get(id)
-        db.session.delete(dele)
+        dele.finalDate = datetime.now()
+        dele.state = 0
         db.session.commit()
         
-        flash("La ubicación se elimino correctamente", "alert alert-success")
+        flash("La ubicación se eliminó correctamente", "alert alert-success")
 
         return redirect(url_for('locations.getAll'))
    except Exception as ex:

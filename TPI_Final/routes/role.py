@@ -67,7 +67,7 @@ def delete(id):
         db.session.delete(delrol)
         db.session.commit()
         
-        flash("El permiso se elimino correctamente", "alert alert-success")
+        flash("El permiso se eliminó correctamente", "alert alert-success")
 
         return redirect(url_for('roles.getAll'))
    except Exception as ex:

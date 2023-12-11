@@ -66,12 +66,13 @@ def update(id):
 def delete(id):
    try:
         dele = calendarYear.query.get(id)
-        db.session.delete(dele)
+        dele.finalDate = datetime.now()
+        dele.state = 0
         db.session.commit()
         
         flash("El calendario se eliminó correctamente", "alert alert-success")
 
         return redirect(url_for('calendarYears.getAll'))
    except Exception as ex:
-        flash("No se puede eliminar esta ubicación porque tiene una entidad asociada","alert alert-danger")
+        flash("No se puede eliminar este calendario porque tiene una entidad asociada","alert alert-danger")
         return redirect(url_for('calendarYears.getAll'))
