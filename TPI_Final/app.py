@@ -17,6 +17,9 @@ from routes.hanger import hangers
 from routes.calendarYear import calendarYears
 from routes.quota import quotas
 from routes.paymentType import paymenttype
+from routes.report import reports
+from routes.tariff import tariffs
+from routes.payment import payments
 
 
 app = Flask(__name__)
@@ -46,5 +49,8 @@ app.register_blueprint(hangers)
 app.register_blueprint(calendarYears)
 app.register_blueprint(quotas)
 app.register_blueprint(paymenttype)
+app.register_blueprint(tariffs)
+app.register_blueprint(payments)
+app.register_blueprint(reports)
 
 
