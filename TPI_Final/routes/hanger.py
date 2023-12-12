@@ -38,7 +38,7 @@ def create():
         flash("Debe ingresar el número de hanger","alert alert-danger")
         return redirect(url_for('hangers.create'))
     
-    add = hanger(nroHanger=nroHanger, locationId = idLocation, userId=userId, description=description, createDate = createDate,finalDate=finalDate, state=state)
+    add = hanger(nroHanger=nroHanger, locationId = idLocation, userId=userId, description=description, createDate = createDate,finalDate=finalDate,isFree =1, state=state)
     db.session.add(add)
     db.session.commit()
 

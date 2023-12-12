@@ -33,7 +33,7 @@ def getbyid(id):
 @kayaks.route('/selectHangers/<id>', methods=['GET'])
 def selectHangers(id):
     print("locationId", id)
-    hangerlist = hanger.query.filter_by(locationId=id).all()
+    hangerlist = hanger.query.filter_by(locationId=id, isFree=1).all()
     data = {}
     data['hangers'] = []
 
@@ -82,29 +82,32 @@ def create():
     
     kayaktypeid = request.form['kayaktypeid']
     partnerid = request.form['partner']
-    hangerid = request.form['hangerid']
+    locationId = request.form['locationId']
+    print("rrequest.form",request.form)
+    # hangerid = request.form['hangerId']
+    # nroHanger = request.form['nroHanger']
     nroKayak = request.form['nroKayak']
     shovelQuantity = request.form['shovelQuantity']
     crewmember = request.form['crewmember']
 
-    userId = current_user.id
-    description = request.form['description']
+    # userId = current_user.id
+    # description = request.form['description']
     
-    isexist = kayak.query.filter_by(name=name).first()
-    if isexist :
-        flash("Ya existe un tipo de kayak con ese nombre","alert alert-danger")
-        return redirect(url_for('kayaktypes.create'))
+    # isexist = kayak.query.filter_by(name=name).first()
+    # if isexist :
+    #     flash("Ya existe un tipo de kayak con ese nombre","alert alert-danger")
+    #     return redirect(url_for('kayaktypes.create'))
 
-    if name == '':
-        flash("Debe ingresar el tipo de kayak.","alert alert-danger")
+    if kayaktypeid == '':
+        flash("Debe seleccionar el tipo de kayak.","alert alert-danger")
         return redirect(url_for('kayaks.create'))
-    if len(name) > 251:
-        flash("La cantidad de caracteres en el nombre no puede ser mayor que 100.","alert alert-danger")
-    if len(description) > 251:
-        flash("La cantidad de caracteres en la descripcion no puede ser mayor que 250.","alert alert-danger")
-        return redirect(url_for('kayaktypes.create'))
+    # if len(name) > 251:
+    #     flash("La cantidad de caracteres en el nombre no puede ser mayor que 100.","alert alert-danger")
+    # if len(description) > 251:
+    #     flash("La cantidad de caracteres en la descripcion no puede ser mayor que 250.","alert alert-danger")
+    #     return redirect(url_for('kayaktypes.create'))
 
-    add = kayak(userId,name,description,1)
+    add = kayak(partnerid,kayaktypeid,locationId,1)
 
     db.session.add(add)
     db.session.commit()

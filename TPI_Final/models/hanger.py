@@ -8,9 +8,10 @@ class hanger(db.Model):
     description = db.Column(db.String(250))
     createDate = db.Column(db.DateTime, nullable=False)
     finalDate = db.Column(db.DateTime)
+    isFree = db.Column(db.Integer)
     state = db.Column(db.Integer)
 
-def __init__(self, userId, locationId, nroHanger ,description,createDate, finalDate, state):
+def __init__(self, userId, locationId, nroHanger ,description,createDate, finalDate, isFree, state):
     
     self.userId = userId
     self.locationId = locationId
@@ -18,4 +19,5 @@ def __init__(self, userId, locationId, nroHanger ,description,createDate, finalD
     self. description = description
     self.createDate = createDate
     self.finalDate = finalDate
+    self.isFree = isFree # 1 free 2 busy
     self.state = state
