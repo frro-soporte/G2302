@@ -12,6 +12,7 @@
                     <th scope="col">Descripción</th>
                     <th scope="col">Fecha de creación</th>
                     <th scope="col">Ubicación</th>
+                    <th scope="col">Estado</th>
                     <th scope="col">Acción</th>
                 </tr>
             </thead>
@@ -27,8 +28,14 @@
                             {{l.name}}
                             {% endif %}
                             {% endfor %}
+                        </td>                        
+                        <td>
+                            {%if h.isFree == 1 %}
+                                Libre
+                            {% else %}
+                                Ocupado
+                            {% endif %}
                         </td>
-                        
                         <td>
                             <a href="{{ url_for('hangers.update', id=h.id) }}"><i class="fa-solid fa-pencil"></i></a>
                             

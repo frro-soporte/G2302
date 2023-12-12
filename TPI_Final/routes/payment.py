@@ -23,7 +23,7 @@ def getAll():
     metodospago = paymentType.query.all()
     cuotas = quota.query.all()
     tarifas = tariff.query.all()
-    return render_template('payment/list.html', pagos=pagos, usuarios = usuarios, metodospago = metodospago, cuotas = cuotas, tarifas = tarifas)
+    return render_template('payment/list.html', pagos=pagos, usuarios = usuarios, metodospago = metodospago, cuotas = cuotas, tarifas = tarifas,menues = Menu.MenuesStatic(current_user.roleId))
 
 
 @payments.route('/payment/create', methods=['GET', 'POST'])
@@ -35,7 +35,7 @@ def create():
         cuotas = quota.query.all()
         tarifas = tariff.query.all()
         kayaks = kayak.query.all()
-        return render_template('payment/create.html', usuarios = usuarios, metodospago = metodospago, cuotas = cuotas, tarifas = tarifas, kayaks = kayaks)
+        return render_template('payment/create.html', usuarios = usuarios, metodospago = metodospago, cuotas = cuotas, tarifas = tarifas, kayaks = kayaks,menues = Menu.MenuesStatic(current_user.roleId))
     
     if request.method == 'POST':
         userId = request.form['userId']

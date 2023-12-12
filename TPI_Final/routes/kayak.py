@@ -5,6 +5,7 @@ from models.kayaktype import kayaktype
 from models.user import user
 from models.hanger import hanger
 from models.location import location
+from sqlalchemy.sql import alias
 from data.db import db
 from flask_login import current_user, login_required
 from menu.menu import Menu
@@ -23,16 +24,16 @@ kayaks = Blueprint('kayaks', __name__)
 @login_required
 def getAll():
     val = kayak.query.all()
-    return render_template('kayak/list.html', datas = val,menues = Menu.MenuesStatic(current_user.roleId))
+    userList = kayak.query.join(user, user.id==kayak.userId).add_columns(kayak,user,location,kayaktype,hanger).join(hanger, hanger.id == kayak.hangerId).join(location, 
+                location.id == hanger.locationId).join(kayaktype, kayaktype.id == kayak.KayaktypeId).all()
+    return render_template('kayak/list.html', datas = userList,menues = Menu.MenuesStatic(current_user.roleId))
 
 @kayaks.route("/kayaks/<id>", methods=["GET"])
 def getbyid(id):
     return kayak.query.get(id)
 
-# @kayaks.route("/kayaks/<id>", methods=["GET"])
 @kayaks.route('/selectHangers/<id>', methods=['GET'])
 def selectHangers(id):
-    print("locationId", id)
     hangerlist = hanger.query.filter_by(locationId=id, isFree=1).all()
     data = {}
     data['hangers'] = []
@@ -41,6 +42,20 @@ def selectHangers(id):
         data['hangers'].append({
         'id': item.id,
         'nroHanger': item.nroHanger
+        })
+    with open('data.json', 'w') as file:
+        json.dump(data, file, indent=4)
+    return data
+
+@kayaks.route('/selecKayakNro/<nro>', methods=['GET'])
+def selecKayakNro(nro):
+    kayaklist = kayak.query.filter_by(nroKayak=nro).all()
+    data = {}
+    data['kayak'] = []
+
+    for item in kayaklist:
+        data['kayak'].append({
+        'id': item.id
         })
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=4)
@@ -82,35 +97,28 @@ def create():
     
     kayaktypeid = request.form['kayaktypeid']
     partnerid = request.form['partner']
-    locationId = request.form['locationId']
-    print("rrequest.form",request.form)
-    # hangerid = request.form['hangerId']
-    # nroHanger = request.form['nroHanger']
+    hangerid = request.form['hangerId']
     nroKayak = request.form['nroKayak']
     shovelQuantity = request.form['shovelQuantity']
     crewmember = request.form['crewmember']
+    locationId = request.form['locationId']
 
     # userId = current_user.id
     # description = request.form['description']
     
-    # isexist = kayak.query.filter_by(name=name).first()
-    # if isexist :
-    #     flash("Ya existe un tipo de kayak con ese nombre","alert alert-danger")
-    #     return redirect(url_for('kayaktypes.create'))
-
-    if kayaktypeid == '':
-        flash("Debe seleccionar el tipo de kayak.","alert alert-danger")
+    isexist = kayak.query.filter_by(nroKayak=nroKayak).first()
+    if isexist :
+        flash("Ya existe un kayak registrado con ese numero","alert alert-danger")
         return redirect(url_for('kayaks.create'))
-    # if len(name) > 251:
-    #     flash("La cantidad de caracteres en el nombre no puede ser mayor que 100.","alert alert-danger")
-    # if len(description) > 251:
-    #     flash("La cantidad de caracteres en la descripcion no puede ser mayor que 250.","alert alert-danger")
-    #     return redirect(url_for('kayaktypes.create'))
 
-    add = kayak(partnerid,kayaktypeid,locationId,1)
-
+    add = kayak(partnerid,hangerid,kayaktypeid,nroKayak,shovelQuantity,crewmember)   
     db.session.add(add)
     db.session.commit()
+
+    updatehanger = hanger.query.filter_by(locationId=locationId, isFree=1, nroHanger=nroKayak).first()
+    if updatehanger:
+        updatehanger.isFree = 2
+        db.session.commit()
 
     flash("El tipo de kayak se guardo correctamente", "alert alert-success")
 

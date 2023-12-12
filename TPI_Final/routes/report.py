@@ -1,15 +1,12 @@
-from data.db import db
-from datetime import datetime
+from models.report import Rental
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from menu.menu import Menu  
+from flask_login import current_user, login_required        
 
-class Rental(db.Model):
-    __tablename__ = 'rental'
+Rental = Blueprint('Rental', __name__)
 
-    id = db.Column(db.Integer, primary_key=True)
-    kayak_id = db.Column(db.Integer, db.ForeignKey('kayak.id'), nullable=False)
-    rental_date = db.Column(db.Date, default=datetime.now().date(), nullable=False)
-    rental_time = db.Column(db.Time, default=datetime.now().time(), nullable=False)
-
-    def __init__(self, kayak_id, rental_date=None, rental_time=None):
-        self.kayak_id = kayak_id
-        self.rental_date = rental_date or datetime.now().date()
-        self.rental_time = rental_time or datetime.now().time()
+@Rental.route("/Rental", methods=["GET"])
+def getAll():
+    # usr = user.query.all()
+    userfilter = Rental.query.all()
+    return render_template('user/list.html',userfilter = userfilter,menues = Menu.MenuesStatic(current_user.roleId))

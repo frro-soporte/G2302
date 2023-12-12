@@ -6,15 +6,14 @@ class kayak(db.Model):
     userId = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     hangerId = db.Column(db.Integer, db.ForeignKey('hanger.id'), nullable=False)
     KayaktypeId = db.Column(db.Integer, db.ForeignKey('kayaktype.id'), nullable=False)
-    nroKayak = db.Column(db.Integer)
+    nroKayak = db.Column(db.String(250), nullable=False)
     shovelQuantity = db.Column(db.Integer)
     crewmember = db.Column(db.Integer)
     createDate = db.Column(db.DateTime, nullable=False)
     finalDate = db.Column(db.DateTime)
     state = db.Column(db.Integer)
 
-    def __init__(self,id,userId, hangerId, KayaktypeId,nroKayak,shovelQuantity,crewmember, state = 1):
-        self.id = id
+    def __init__(self,userId, hangerId, KayaktypeId,nroKayak,shovelQuantity,crewmember, state = 1):
         self.userId = userId
         self.hangerId = hangerId
         self.KayaktypeId = KayaktypeId

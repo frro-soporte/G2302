@@ -8,11 +8,12 @@
             </a>
             <thead class="table-dark">
                 <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Apellido</th>
-                    <th scope="col">Direccion</th>
-                    <th scope="col">Telefono</th>
-                    <th scope="col">Correo</th>
+                    <th scope="col">Dueño del kayak</th>
+                    <th scope="col">Ubicación</th>
+                    <th scope="col">Nro. Percha</th>
+                    <th scope="col">Tipo Kayak</th>
+                    <th scope="col">Nro. Kayak</th>
+                    <th scope="col">Cant. persona</th>
                     <th scope="col">Accion</th>
                     <th scope="col"></th>
                 </tr>
@@ -20,14 +21,15 @@
             <tbody>
                 {% for data in datas%}
                     <tr>
-                        <td>{{data.shovelQuantity}}</td>
-                        <td>{{data.shovelQuantity}}</td>
-                        <td>{{data.shovelQuantity}}</td>
-                        <td>{{data.shovelQuantity}}</td>
-                        <td>{{data.shovelQuantity}}</td>
+                        <td>{{data.user.firstName}} - {{data.user.lastName }}</td>
+                        <td>{{data.location.name}}</td>                        
+                        <td>{{data.hanger.nroHanger}}</td>
+                        <td>{{data.kayaktype.name}}</td>
+                        <td>{{data.kayak.nroKayak}}</td>
+                        <td>{{data.kayak.crewmember}}</td>
                         <td>
-                            <a href="{{ url_for('kayaks.update', id=data.id) }}"><i class="fa-solid fa-pencil"></i></a>
-                            <a href="{{ url_for('kayaks.delete', id=data.id) }}"><i class="fa-solid fa-trash-can"></i></a>
+                            <a href="{{ url_for('kayaks.update', id=data.kayak.id) }}"><i class="fa-solid fa-pencil"></i></a>
+                            <a href="{{ url_for('kayaks.delete', id=data.kayak.id) }}"><i class="fa-solid fa-trash-can"></i></a>
                         </td>
                     </tr>
                 {% endfor %}

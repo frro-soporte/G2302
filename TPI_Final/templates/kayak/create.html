@@ -11,7 +11,7 @@
                           <div class="alert alert-danger text-center msgerr" role="alert" hidden></div>
                           <div class="row mb-2">
                             <div class="form-group col">
-                                <select  name="kayaktypeid"  class="form-control" id="kayaktypeid">
+                                <select  name="kayaktypeid"  class="form-control hidemsg" id="kayaktypeid">
                                     <option value="">Seleccionar tipo de kayak</option>
                                     {%  for tpk in ktype %}
                                       <option value="{{ tpk.id}}"   name="kayaktypeid">{{tpk.name}}</option>
@@ -19,7 +19,7 @@
                                   </select>
                             </div>
                             <div class="form-group col">
-                                <select  name="partner"  class="form-control" id="partner">
+                                <select  name="partner"  class="form-control hidemsg" id="partner">
                                     <option value="">Seleccionar dueño del  kayak</option>
                                     {%  for part in partners %}
                                        <option value="{{ part.id}}"   name="partner">{{part.firstName }} {{ part.lastName}}</option>
@@ -30,7 +30,7 @@
 
                             <div class="row mb-2">
                               <div class="form-group col">
-                                <select  name="locationId"  class="form-control" id="locationId">
+                                <select  name="locationId"  class="form-control hidemsg" id="locationId">
                                     <option value="">Seleccionar la urbicacion</option>
                                     {%  for urb in locations %}
                                       <option value="{{ urb.id}}"   name="locationId" onchange="setVariable(urb.id)">{{urb.name}}</option>
@@ -38,7 +38,7 @@
                                   </select>
                               </div>
                               <div class="form-group col" >
-                                <select  name="hangerId"  class="form-control addselect" id="hangerId" disabled>
+                                <select  name="hangerId"  class="form-control addselect hidemsg" id="hangerId" disabled>
                                   <option value="">Seleccionar el Nro. de la  percha</option>
                                 </select>
                               </div>
@@ -46,13 +46,13 @@
                             
                             <div class="row mb-2">
                               <div class="form-group col-md-4">
-                                <input type="text" class="form-control" id="nroKayak" placeholder="Nro. Kayak" name="nroKayak">
+                                <input type="text" class="form-control hidemsg" id="nroKayak" placeholder="Nro. Kayak" name="nroKayak">
                               </div>
                               <div class="form-group col-md-4">
-                                <input type="text" class="form-control" id="shovelQuantity"  placeholder="Cantidad de pala" name="shovelQuantity">
+                                <input type="text" class="form-control hidemsg" id="shovelQuantity"  placeholder="Cantidad de pala" name="shovelQuantity">
                               </div>
                               <div class="form-group col-md-4">
-                                <input type="text" class="form-control" id="crewmember" placeholder="Cantidad de persona" name="crewmember">
+                                <input type="text" class="form-control hidemsg" id="crewmember" placeholder="Cantidad de persona" name="crewmember">
                               </div>
                             </div>
   
@@ -86,12 +86,10 @@
                       divselet +='<option value='+ element.id +' name="hangerId">'+ element.nroHanger +'</option>'
                     }
                   $(".addselect").append(divselet);
-                  alert("Success");
                 }
                 else{
                   $("#hangerId").prop('disabled', true);
                   $(".addselect").append(divselet);
-                  alert("Error");
                 }
               },
               error:function(err){
@@ -103,23 +101,78 @@
           });   
     
       
-        $("#btnkayaksub").on("click",function(e){
-          debugger;
+        $("#btnkayaksub").on("click", async function(e){
           if($("#kayaktypeid").val() === ""){
             $(".msgerr").prop('hidden', false);
             $(".msgerr").html("Debe seleccionar el tipo de kayak");
-            // $(".msgerr").load($("#base-url-data").data("url-flashes"));
             e.preventDefault();
             return;
           }
           if($("#partner").val() === ""){
             $(".msgerr").prop('hidden', false);
             $(".msgerr").html("Debe seleccionar el dueño del kayak");
-            // $(".msgerr").load($("#base-url-data").data("url-flashes"));
+            e.preventDefault();
+            return;
+          }
+
+          if($("#locationId").val() === ""){
+            $(".msgerr").prop('hidden', false);
+            $(".msgerr").html("Debe seleccionar la urbicación");
+            e.preventDefault();
+            return;
+          }
+          
+          if($("#hangerId").val() === ""){
+            $(".msgerr").prop('hidden', false);
+            $(".msgerr").html("Debe seleccionar el NRO. de percha");
+            e.preventDefault();
+            return;
+          }
+          
+          if($("#nroKayak").val() === ""){
+            $(".msgerr").prop('hidden', false);
+            $(".msgerr").html("Debe ingresar el NRO. de kayak");
+            e.preventDefault();
+            return;
+          }
+          
+          if($("#shovelQuantity").val() === ""){
+            $(".msgerr").prop('hidden', false);
+            $(".msgerr").html("Debe ingresar la cantidad de pala");
+            e.preventDefault();
+            return;
+          }
+          
+          if($("#crewmember").val() === ""){
+            $(".msgerr").prop('hidden', false);
+            $(".msgerr").html("Debe ingresar la cantidad de persona");
             e.preventDefault();
             return;
           }
         })
+
+        $(".hidemsg").on("click",function(){
+          $(".msgerr").prop('hidden', true);
+        });
+
+         $("#nroKayak").on("blur", function(e){
+          $.ajax({
+              url:`/selecKayakNro/${$("#nroKayak").val()}`,
+              method: "GET",
+              headers: { "Accept": "application/json; odata=verbose" },
+              cache: false,
+              success: function(resp){
+                if(resp.kayak.length > 0){
+                  $(".msgerr").prop('hidden', false);
+                  $(".msgerr").html("Ya existe un kayak registrado con ese numero");
+                  e.preventDefault();
+                }
+              },
+              error:function(err){
+                return false;
+              }
+            });
+         })
     });
     
   </script>
