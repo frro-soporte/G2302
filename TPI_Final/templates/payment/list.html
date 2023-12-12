@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}   
+{% block body %}
+    <div>
+        <table class="table col-xl-6 col-lg-6 col-md-6 col-sm-6 mx-auto mt-3 ">
+            {% include 'partial/_message.html'%}
+            <a href="{{ url_for('payments.create') }}" style="float: right; margin-bottom: 1%;">
+                <button class="btn btn-primary float-right">Crear</button>
+            </a>
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Id Kayak</th>
+                    <th scope="col">Método de pago</th>
+                    <th scope="col">Cuota</th>
+                    <th scope="col">Tarifa</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Fecha de creación</th>
+                    <th scope="col">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pagos%}
+                {% if p.state == 1 %}
+                    <tr>
+                        <td>{{p.id}}</td>
+
+                        {% for u in usuarios %}
+                        {% if u.id == p.userId%}
+                        <td>{{u.userName}}</td>
+                        {% endif %}
+                        {% endfor %}
+                        <td>{{p.kayakId}}</td>
+
+                        {% for m in metodospago %}
+                        {% if m.id == p.paymentTypeId %}
+                        <td>{{m.name}}</td>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% for c in cuotas %}
+                        {% if c.id == p.quotaId %}
+                        <td>{{c.quota}}</td>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        {% for t in tarifas %}
+                        {% if t.id == p.tariffId %}
+                        <td>{{t.amount}}</td>
+                        {% endif %}
+                        {% endfor %}
+
+                        <td>{{p.description}}</td>        
+                        <td>{{p.createDate}}</td>
+
+                        <td>
+                            <a href="{{ url_for('payments.update', id=p.id) }}"><i class="fa-solid fa-pencil"></i></a>       
+                            <a href="{{ url_for('payments.delete', id=p.id) }}"><i class="fa-solid fa-trash-can"></i></a>
+                        </td>
+                    </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>       
+    </div>
+{% endblock %}

@@ -13,7 +13,7 @@ hangers = Blueprint('hangers', __name__)
 @login_required
 def getAll():
     hangs = hanger.query.filter_by(state=1)
-    loc = location.query.filter_by(state=1)
+    loc = location.query.filter_by(state=1)  
     return render_template('hanger/list.html', hang = hangs, loc = loc,menues = Menu.MenuesStatic(current_user.roleId))
 
 @hangers.route("/hanger/create", methods=["POST", "GET"])
@@ -80,3 +80,4 @@ def delete(id):
    except Exception as ex:
         flash("No se puede eliminar este hanger","alert alert-danger")
         return redirect(url_for('hangers.getAll'))
+   

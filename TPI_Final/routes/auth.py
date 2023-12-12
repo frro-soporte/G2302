@@ -82,6 +82,7 @@ def status_401(error):
 def status_404(error):
     return "<h1>Página no encontrada</h1>", 404
 
+
 datos_JSON =  """
 [ {
       "name": "Quimica",

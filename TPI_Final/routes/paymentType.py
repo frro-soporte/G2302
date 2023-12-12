@@ -1,3 +1,4 @@
+from menu.menu import Menu
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from models.quotas import quota
 from data.db import db
@@ -11,7 +12,7 @@ paymenttype = Blueprint('paymenttype', __name__)
 @login_required
 def getAll():
     payments = paymentType.query.all()
-    return render_template('paymentType/list.html', payments = payments)
+    return render_template('paymentType/list.html', payments = payments, menues = Menu.MenuesStatic(current_user.roleId))
 
 @paymenttype.route('/paymenttype/create', methods=['GET', 'POST'])
 @login_required

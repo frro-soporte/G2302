@@ -140,7 +140,7 @@ def delete(id):
         db.session.delete(dele)
         db.session.commit()
         
-        flash("kayaks se elimino correctamente", "alert alert-success")
+        flash("kayaks se eliminó correctamente", "alert alert-success")
 
         return redirect(url_for('kayaktypes.getAll'))
    except Exception as ex:

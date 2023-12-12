@@ -53,7 +53,7 @@ class OptionMenu():
             "isSubMenu": "false"
         },
         {
-            "url":"/payment",
+            "url":"/paymenttype",
             "displayName":" Cobranza",
             "active":"hanger",
             "isSubMenu": "false"
@@ -63,8 +63,8 @@ class OptionMenu():
             "isSubMenu": "true",
             "Submenu":[
                  {
-                    "url":"/paymenteMonth",
-                    "displayName":"Informa mess",
+                    "url":"/reportMovements",
+                    "displayName":"Movimientos",
                     "active":"partner",
                     "isSubMenu": "false"
                 },
@@ -112,7 +112,26 @@ class OptionMenu():
                 "url":"/payment",
                 "displayName":" Cobranza",
                 "active":"hanger"
-            }
+            },
+
+             {
+            "displayName":"Informes",
+            "isSubMenu": "true",
+            "Submenu":[
+                 {
+                    "url":"/reportMovements",
+                    "displayName":"Movimientos",
+                    "active":"partner",
+                    "isSubMenu": "false"
+                }
+            ]
+        },
+        {
+            "url":"",
+            "displayName":"",
+            "active":"",
+            "isSubMenu": "false"
+        }
             # ,
             # {
             #     "url":"/Location",
