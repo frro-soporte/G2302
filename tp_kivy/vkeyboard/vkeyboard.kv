@@ -1,0 +1,33 @@
+GridLayout:
+    cols: 1
+    spacing:30
+    padding:40
+
+    Label:
+        id: l
+        text:''
+
+    VKeyboard:
+        
+        on_key_up:
+            if args[1] == 'backspace':\
+            l.text = l.text[:-1]
+            elif args[1] == 'spacebar':\
+            l.text += " "
+            elif args[1] == 'capslock':\
+            pass
+            elif args[1] == 'tab':\
+            l.text+="   "
+            elif args[1] == 'shift':\
+            pass
+            elif args[1] == 'escape':\
+            pass
+            elif args[1] == 'enter':\
+            pass
+            elif args[1] == 'layout':\
+            pass
+            elif 'capslock' in args[3]:\
+            l.text += str.upper(args[1])
+            else:\
+            l.text += args[1]
+            

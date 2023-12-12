@@ -1,0 +1,27 @@
+{% include('partial/_bootstrap.html') %}  
+<div class="container">
+    <div class="abs-center">
+      <form id="formulario" action="/auth" method="post" class="form border p-3 form">
+        {% include 'partial/_message.html'%}
+        <img class="card-img-top imglog" src="{{ url_for('static', filename='img/kayak4.jpg') }}" alt="Card image cap">
+        <h2 class="text-center">Cuenta</h2>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="form-group">
+          <label for="email">Username</label>
+          <input type="text"  name="userName" id="userName" class="form-control email-login" name="userName">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" name="userPass" id="userPass" class="form-control password-login"
+          name="userPass"> 
+        </div>
+        <div class="form-group p-2">
+          <button type="submit" class="btn btn-primary btn-block col-md-12">Ingresar</button>
+        </div>
+        <div class="clearfix">
+          <a href="{{ url_for('users.create') }}" class="pull-right">Registrarse</a>
+          <a href="{{ url_for('users.reset_password') }}" class="col-md-offset-2" style="float: right;">¿Olvidar contraseña?</a>
+        </div>
+      </form>
+    </div>
+  </div>

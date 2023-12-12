@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}   
+{% block body %}
+    <div>
+        <table class="table col-xl-6 col-lg-6 col-md-6 col-sm-6 mx-auto mt-3 ">
+            {% include 'partial/_message.html'%}
+            <a href="{{ url_for('users.create') }}"  style="float: right;margin-bottom: 1%;">
+                <button class="btn btn-primary float-right"  >Nuevo usuario</button>
+            </a>
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Apellido</th>
+                    <th scope="col">Direccion</th>
+                    <th scope="col">Telefono</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Accion</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in userfilter%}
+                    <tr>
+                        <td>{{user.firstName}}</td>
+                        <td>{{user.lastName}}</td>
+                        <td>{{user.address}}</td>
+                        <td>{{user.phone}}</td>
+                        <td>{{user.mail}}</td>
+                        <td>
+                            <a href="{{ url_for('users.update', id=user.id) }}"><i class="fa-solid fa-pencil"></i></a>
+                            <a href="{{ url_for('users.delete', id=user.id) }}"><i class="fa-solid fa-trash-can"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>       
+    </div>
+{% endblock %}
